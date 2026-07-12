@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHA Message Generator</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:20px;
+}
+.container{
+    max-width:500px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.15);
+}
+h2{
+    text-align:center;
+    color:#0b8f3b;
+}
+input,textarea,select{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-sizing:border-box;
+}
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:6px;
+    font-size:16px;
+    cursor:pointer;
+}
+.generate{
+    background:#0b8f3b;
+    color:#fff;
+}
+.copy{
+    background:#007bff;
+    color:#fff;
+}
+.whatsapp{
+    background:#25D366;
+    color:#fff;
+}
+pre{
+    white-space:pre-wrap;
+    background:#f7f7f7;
+    padding:15px;
+    border-radius:6px;
+    margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>💚 RHA Message Generator</h2>
+
+<input type="text" id="chapter" placeholder="Chapter Name" value="Hinjewadi">
+
+<input type="date" id="date">
+
+<input type="time" id="time">
+
+<textarea id="location" placeholder="Distribution Location"></textarea>
+
+<input type="text" id="donor" placeholder="Donor Name">
+
+<input type="text" id="food" placeholder="Food Items">
+
+<select id="count">
+<option>5</option>
+<option>10</option>
+<option>15</option>
+<option>20</option>
+</select>
+
+<button class="generate" onclick="generate()">Generate Message</button>
+
+<button class="copy" onclick="copyText()">Copy Message</button>
+
+<button class="whatsapp" onclick="shareWhatsApp()">Share to WhatsApp</button>
+
+<pre id="output"></pre>
+
+</div>
+
+<script>
+
+function formatDate(date){
+if(!date) return "";
+const d=new Date(date);
+return d.toLocaleDateString('en-GB',{
+day:'numeric',
+month:'long',
+year:'numeric'
+});
+}
+
+function formatTime(time){
+if(!time) return "";
+let parts=time.split(":");
+let h=parseInt(parts[0]);
+let m=parts[1];
+let ampm=h>=12?"PM":"AM";
+h=h%12;
+if(h==0)h=12;
+return h+":"+m+" "+ampm;
+}
+
+function generate(){
+
+let chapter=document.getElementById("chapter").value;
+let date=formatDate(document.getElementById("date").value);
+let time=formatTime(document.getElementById("time").value);
+let location=document.getElementById("location").value;
+let donor=document.getElementById("donor").value;
+let food=document.getElementById("food").value;
+let count=parseInt(document.getElementById("count").value);
+
+let msg="💚"+chapter+" Chapter Food Distribution Drive💚\n\n";
+
+msg+="📅 Date: "+date+"\n\n";
+msg+="🕒 Time: "+time+"\n\n";
+msg+="📍 Distribution Location:\n"+location+"\n\n";
+msg+="🤝 Donor:\n"+donor+"\n\n";
+msg+="🍱 Food:\n"+food+"\n\n";
+msg+="Robin in Service (Please add your names)\n\n";
+
+for(let i=1;i<=count;i++){
+msg+=i+".\n";
+}
+
+document.getElementById("output").textContent=msg;
+
+}
+
+function copyText(){
+
+let text=document.getElementById("output").textContent;
+
+navigator.clipboard.writeText(text);
+
+alert("Message Copied!");
+
+}
+
+function shareWhatsApp(){
+
+let text=encodeURIComponent(document.getElementById("output").textContent);
+
+window.open("https://wa.me/?text="+text);
+
+}
+
+</script>
+
+</body>
+</html>
